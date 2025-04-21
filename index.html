@@ -58,6 +58,19 @@
       transform-origin: bottom center;
       opacity: 0;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.5s ease;
+    }
+
+    .fallen-petal {
+      position: absolute;
+      width: 40px;
+      height: 70px;
+      background: linear-gradient(135deg, #ff4d6d, #ff1a4d);
+      border-radius: 50% 50% 0 0;
+      transform-origin: center;
+      opacity: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      pointer-events: none;
     }
 
     .stem {
@@ -83,9 +96,30 @@
       100% { transform: rotate(0deg); }
     }
 
+    @keyframes fall {
+      0% { 
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(200px) rotate(360deg);
+        opacity: 0.7;
+      }
+      100% { 
+        transform: translateY(200px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     @keyframes fadeOut {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(0.8); opacity: 0; }
+      0% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% { 
+        transform: scale(0.8);
+        opacity: 0;
+      }
     }
 
     #message {
@@ -216,6 +250,7 @@
         return;
       }
 
+      // Criar a flor normal
       for (let i = 0; i < 8; i++) {
         let petal = document.createElement('div');
         petal.className = 'petal';
@@ -237,10 +272,35 @@
         container.style.animation = 'sway 2s infinite';
         petals.forEach(p => p.style.opacity = 1);
       } else if (hour >= 18 && hour <= 23) {
-        petals.forEach((p, i) => {
-          p.style.animation = `fadeOut 0.5s ease ${i * 0.2}s forwards`;
-        });
+        // Manter a flor normal
+        petals.forEach(p => p.style.opacity = 1);
+        
+        // Função para criar uma pétala caindo
+        function createFallingPetal() {
+          let fallenPetal = document.createElement('div');
+          fallenPetal.className = 'fallen-petal';
+          fallenPetal.style.left = (Math.random() * 200 - 100) + 'px';
+          fallenPetal.style.top = '30px';
+          fallenPetal.style.transform = `rotate(${Math.random() * 360}deg)`;
+          fallenPetal.style.animation = `fall 3s ease forwards`;
+          container.appendChild(fallenPetal);
+          
+          // Remover a pétala após a animação
+          setTimeout(() => {
+            fallenPetal.remove();
+          }, 3000);
+        }
+
+        // Criar uma pétala a cada 500ms
+        if (!window.petalInterval) {
+          window.petalInterval = setInterval(createFallingPetal, 500);
+        }
       } else {
+        // Limpar o intervalo quando não for mais necessário
+        if (window.petalInterval) {
+          clearInterval(window.petalInterval);
+          window.petalInterval = null;
+        }
         petals.forEach(p => p.style.opacity = 0);
       }
     }
@@ -256,12 +316,14 @@
     }
 
     setInterval(spawnHeart, 1000);
+    
+    // Atualizar contadores a cada segundo
     updateCounters();
+    setInterval(updateCounters, 1000);
+    
+    // Atualizar flor a cada minuto
     updateFlower();
-    setInterval(() => {
-      updateCounters();
-      updateFlower();
-    }, 60000);
+    setInterval(updateFlower, 60000);
   </script>
 </body>
 </html>
