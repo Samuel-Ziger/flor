@@ -7,35 +7,95 @@
   <link rel="icon" type="image/png" href="coração.png">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: linear-gradient(135deg, #fff0f5 0%, #ffe6e6 50%, #ffd6e0 100%);
+      --text-color: #333;
+      --container-bg: rgba(255,255,255,0.9);
+      --shadow-color: rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --text-color: #fff;
+      --container-bg: rgba(26, 26, 46, 0.9);
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #fff0f5 0%, #ffe6e6 50%, #ffd6e0 100%);
+      background: var(--bg-color);
       text-align: center;
       padding: 2rem;
       overflow-x: hidden;
       min-height: 100vh;
       position: relative;
+      color: var(--text-color);
+      transition: background 0.5s ease;
     }
 
-    h1 {
-      margin-bottom: 1rem;
-      color: #b30059;
-      font-family: 'Dancing Script', cursive;
-      font-size: 3rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(30deg);
+    }
+
+    .candle {
+      position: absolute;
+      font-size: 2.5rem;
+      color: #ff6b6b;
+      filter: drop-shadow(0 0 8px #ff6b6b);
+      animation: flicker 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) rotate(-5deg); opacity: 1; }
+      50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+      100% { transform: scale(0.9) rotate(-5deg); opacity: 0.9; }
+    }
+
+    .flame {
+      position: absolute;
+      width: 8px;
+      height: 12px;
+      background: #ff6b6b;
+      border-radius: 50% 50% 0 50%;
+      animation: flicker 1s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--container-bg);
+      border-radius: 20px;
+      box-shadow: 0 8px 16px var(--shadow-color);
+      transition: background 0.5s ease;
     }
 
     #countdown, #elapsed {
       margin: 1.5rem 0;
       font-size: 1.5rem;
-      color: #333;
-      background: rgba(255,255,255,0.8);
+      color: var(--text-color);
+      background: var(--container-bg);
       padding: 1rem;
       border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px var(--shadow-color);
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      transition: all 0.5s ease;
+      font-family: 'Montserrat', sans-serif;
     }
 
     #flower-container {
@@ -146,13 +206,12 @@
       100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
     }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: rgba(255,255,255,0.9);
-      border-radius: 20px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    [data-theme="dark"] .petal {
+      box-shadow: 0 0 10px #ff6b6b;
+    }
+
+    [data-theme="dark"] .stem {
+      box-shadow: 0 0 10px #2e7d32;
     }
 
     @media (max-width: 600px) {
@@ -160,9 +219,18 @@
       #countdown, #elapsed { font-size: 1.2rem; }
       .container { padding: 1rem; }
     }
+
+    h1 {
+      margin-bottom: 1rem;
+      color: #b30059;
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
   <div class="container">
     <h1>Nosso Dia</h1>
     <div id="countdown"></div>
@@ -316,6 +384,38 @@
       setTimeout(() => heart.remove(), 6000);
     }
 
+    function createCandles() {
+      const container = document.getElementById('flower-container');
+      const candles = [
+        { left: -50, top: 150 },
+        { left: 150, top: 150 }
+      ];
+
+      candles.forEach(pos => {
+        const candle = document.createElement('div');
+        candle.className = 'candle';
+        candle.style.left = pos.left + 'px';
+        candle.style.top = pos.top + 'px';
+        candle.innerHTML = '🕯️';
+        container.appendChild(candle);
+      });
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      body.setAttribute('data-theme', newTheme);
+      
+      if (newTheme === 'dark') {
+        createCandles();
+      } else {
+        const candles = document.querySelectorAll('.candle');
+        candles.forEach(candle => candle.remove());
+      }
+    }
+
     setInterval(spawnHeart, 1000);
     
     // Atualizar contadores a cada segundo
@@ -325,6 +425,9 @@
     // Atualizar flor a cada minuto
     updateFlower();
     setInterval(updateFlower, 60000);
+
+    // Inicializar o tema
+    document.body.setAttribute('data-theme', 'light');
   </script>
 </body>
 </html>
