@@ -151,13 +151,36 @@
     function updateCounters() {
       const now = new Date();
       const timeLeft = targetDate - now;
+      
+      // Calculando tempo restante
       const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      countdownEl.textContent = `Faltam ${daysLeft} dias para o nosso dia (03/09/2025)`;
+      const hoursLeft = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      
+      countdownEl.textContent = `Faltam ${daysLeft} dias, ${hoursLeft} horas, ${minutesLeft} minutos e ${secondsLeft} segundos para o nosso dia (03/09/2025)`;
 
+      // Calculando tempo passado
       let diff = now - startDate;
       let years = now.getFullYear() - startDate.getFullYear();
       let months = now.getMonth() - startDate.getMonth();
       let days = now.getDate() - startDate.getDate();
+      let hours = now.getHours() - startDate.getHours();
+      let minutes = now.getMinutes() - startDate.getMinutes();
+      let seconds = now.getSeconds() - startDate.getSeconds();
+
+      if (seconds < 0) {
+        minutes--;
+        seconds += 60;
+      }
+      if (minutes < 0) {
+        hours--;
+        minutes += 60;
+      }
+      if (hours < 0) {
+        days--;
+        hours += 24;
+      }
       if (days < 0) {
         months--;
         days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
@@ -166,7 +189,8 @@
         years--;
         months += 12;
       }
-      elapsedEl.textContent = `Já se passaram ${years} anos, ${months} meses e ${days} dias desde 03/09/2022.`;
+
+      elapsedEl.textContent = `Já se passaram ${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos desde 03/09/2022.`;
     }
 
     function updateFlower() {
