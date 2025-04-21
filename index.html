@@ -4,101 +4,138 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nosso Dia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to top, #fff0f5, #ffe6e6);
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #fff0f5 0%, #ffe6e6 50%, #ffd6e0 100%);
       text-align: center;
       padding: 2rem;
       overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
     }
 
     h1 {
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
       color: #b30059;
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     }
 
     #countdown, #elapsed {
-      margin: 1rem 0;
-      font-size: 1.3rem;
+      margin: 1.5rem 0;
+      font-size: 1.5rem;
       color: #333;
-    }
-
-    #flower-container {
-      margin-top: 2rem;
-      position: relative;
-      width: 100px;
-      height: 200px;
+      background: rgba(255,255,255,0.8);
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
 
+    #flower-container {
+      margin-top: 3rem;
+      position: relative;
+      width: 150px;
+      height: 250px;
+      margin-left: auto;
+      margin-right: auto;
+      transition: all 0.3s ease;
+    }
+
     .petal {
-      width: 30px;
-      height: 60px;
-      background: red;
+      width: 40px;
+      height: 70px;
+      background: linear-gradient(135deg, #ff4d6d, #ff1a4d);
       border-radius: 50% 50% 0 0;
       position: absolute;
-      top: 20px;
-      left: 35px;
+      top: 30px;
+      left: 55px;
       transform-origin: bottom center;
       opacity: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .stem {
-      width: 6px;
-      height: 120px;
-      background: green;
+      width: 8px;
+      height: 150px;
+      background: linear-gradient(to bottom, #2e7d32, #1b5e20);
       margin: auto;
       position: absolute;
       bottom: 0;
-      left: 47px;
+      left: 71px;
+      border-radius: 4px;
     }
 
     @keyframes bloom {
-      0% { transform: scaleY(0); opacity: 0; }
-      100% { transform: scaleY(1); opacity: 1; }
+      0% { transform: scaleY(0) rotate(0deg); opacity: 0; }
+      100% { transform: scaleY(1) rotate(360deg); opacity: 1; }
     }
 
     @keyframes sway {
       0% { transform: rotate(0deg); }
-      50% { transform: rotate(3deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
       100% { transform: rotate(0deg); }
     }
 
     @keyframes fadeOut {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0; }
     }
 
     #message {
-      font-size: 1.6rem;
+      font-size: 2rem;
       font-weight: bold;
-      color: crimson;
+      color: #b30059;
       margin-top: 2rem;
+      font-family: 'Dancing Script', cursive;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
     .floating-heart {
       position: fixed;
       bottom: 0;
       animation: float 6s ease-in infinite;
-      color: pink;
-      font-size: 1.5rem;
+      color: #ff4d6d;
+      font-size: 2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     @keyframes float {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.5rem; }
+      #countdown, #elapsed { font-size: 1.2rem; }
+      .container { padding: 1rem; }
     }
   </style>
 </head>
 <body>
-  <h1>Nosso Dia</h1>
-  <div id="countdown"></div>
-  <div id="elapsed"></div>
+  <div class="container">
+    <h1>Nosso Dia</h1>
+    <div id="countdown"></div>
+    <div id="elapsed"></div>
 
-  <div id="flower-container"></div>
-  <div id="message"></div>
+    <div id="flower-container"></div>
+    <div id="message"></div>
+  </div>
 
   <audio id="bg-music" src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" autoplay loop></audio>
 
