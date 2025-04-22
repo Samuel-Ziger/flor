@@ -36,6 +36,10 @@
     </style>
 </head>
 <body>
+    <audio id="bgMusic" autoplay preload="auto">
+        <source src="expecto-patronum-harry-potter.mp3" type="audio/mpeg">
+    </audio>
+
     <a href="index.html" class="flower-btn">
         <img width="48" height="48" src="https://img.icons8.com/doodle/48/flower--v1.png" alt="flower--v1"/>
     </a>
@@ -110,5 +114,13 @@
             <h1>Patronus</h1>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.7; // Volume em 70%
+            bgMusic.play();
+        });
+    </script>
 </body>
 </html>

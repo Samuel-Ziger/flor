@@ -21,6 +21,37 @@ card.addEventListener("mousemove", (e) => {
 	applyParallaxEffect(x, y);
 });
 
+// Adicionar suporte a touchmove para parallax em dispositivos móveis
+card.addEventListener("touchmove", (e) => {
+	const touch = e.touches[0];
+	const rect = card.getBoundingClientRect();
+	const x = (touch.clientX - rect.left) / rect.width;
+	const y = (touch.clientY - rect.top) / rect.height;
+	isHovered = true;
+	applyParallaxEffect(x, y);
+});
+
+// Resetar hover ao finalizar o toque
+card.addEventListener("touchend", () => {
+	isHovered = false;
+});
+
+// Adicionar suporte a deviceorientation para parallax ao inclinar o celular
+if (window.DeviceOrientationEvent) {
+	window.addEventListener("deviceorientation", (event) => {
+		const maxTilt = 30; // grau máximo de inclinação para calcular eixo
+		let gamma = event.gamma; // esquerda-direita
+		let beta = event.beta;   // frente-trás
+		// normalizar valores para [-maxTilt, maxTilt]
+		gamma = Math.max(Math.min(gamma, maxTilt), -maxTilt);
+		beta = Math.max(Math.min(beta, maxTilt), -maxTilt);
+		// converter para [0,1]
+		const x = (gamma + maxTilt) / (2 * maxTilt);
+		const y = (beta + maxTilt) / (2 * maxTilt);
+		applyParallaxEffect(x, y);
+	});
+}
+
 window.addEventListener("load", () => {
 	let progress = 0;
 
